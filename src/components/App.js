@@ -22,16 +22,16 @@ export class App extends Component {
             console.error(err);
         })
     }
-    render() {
+    render({config}, {loading, user}) {
         return (
         <div class="app">
-            {this.state.loading 
-            ? <div> Loading... </div> 
+            {loading 
+            ? <div> Fetching: {config.urls.user} </div> 
             : <div class="user">
                 <figure class="user__image">
-                    <img src={this.state.user.avatar_url} />
+                    <img src={user.avatar_url} />
                 </figure>
-                <p class="user__name">{this.state.user.name}</p>
+                <p class="user__name">{user.name}</p>
              </div>
             }
             
