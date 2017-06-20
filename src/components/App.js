@@ -1,27 +1,44 @@
-import { h } from 'preact';
-import User from './User';
+import { h, Component } from 'preact';
 
-const users = [
-    {
-        image: "http://www.minionnation.co.uk/images/fan/kevins-faves.png",
-        name: "Ozzy Osbourne"
-    },
-    {
-        image: "http://www.minionnation.co.uk/images/fan/stuarts-faves.png",
-        name: "Max Reality"
-    },
-    {
-        image: "http://www.minionnation.co.uk/images/fan/bobs-faves.png",
-        name: "Scarlett Johanson"
+export class App extends Component {
+    constructor (props) {
+        super(props);
+
+        this.state = {
+            user: null,
+            loading: true
+        }
     }
-];
-
-export function App () {
-    return (
+    componentDidMount() {
+        fetch(this.props.config.urls.user)
+        .then(resp => resp.json())
+        .then(user => {
+            this.setState({
+                user,
+                loading: false
+            })
+        })
+        .catch(err => {
+            console.error(err);
+        })
+    }
+    render() {
+        return (
         <div class="app">
-            {users.map(user => <User {...user} key={user.name}/>)}
+            {this.state.loading 
+            ? <div> Loading... </div> 
+            : <div class="user">
+                <figure class="user__image">
+                    <img src={this.state.user.avatar_url} />
+                </figure>
+                <p class="user__name">{this.state.user.name}</p>
+             </div>
+            }
+            
         </div>
     );
+    }
+    
 }
 
 export default App;
