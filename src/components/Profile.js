@@ -11,7 +11,9 @@ export default class Profile extends Component {
         }
     }
     componentDidMount() {
-        fetch(`https://api.github.com/users/${this.props.user}`)
+        //Getting the :user from react-router
+        const username = this.props.match.params.user;
+        fetch(`https://api.github.com/users/${username}`)
         .then(data => data.json())
         .then(user => this.setState({
             user,
