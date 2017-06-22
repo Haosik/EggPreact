@@ -7,4 +7,4 @@ const config = {
     }
 }
 
-render(<App config={config}/>, document.querySelector('main'))
+render(<App config={config} />, document.querySelector('main'))
