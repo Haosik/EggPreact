@@ -1,31 +1,37 @@
 import { h, Component } from 'preact';
+import { connect } from 'preact-redux';
+import { fetchUser } from '../actions';
+
 import User from './User';
 
-export default class Profile extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            user: null,
-            loading: true
-        }
-    }
+export class Profile extends Component {
     componentDidMount() {
-        fetch(`https://api.github.com/users/${this.props.user}`)
-        .then(data => data.json())
-        .then(user => this.setState({
-            user,
-            loading: false
-        }))
-        .catch(err => console.log(err))
+        //Getting the :user from react-router
+        const username = this.props.match.params.user;
+        this.props.fetchUser(username);
     }
-    render({}, { user, loading }) {
+    render({ loading, user }) {
         return (
-                loading 
+            loading
                 ? <p>Fetching...</p>
-                : <User image={user.avatar_url} name={user.name}/>
-                
+                : <User image={user.avatar_url} name={user.name} />
+
         )
     }
 
 }
+
+const mapStateToProps = (state) => {
+    return {
+        loading: state.loading,
+        user: state.user
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchUser: (username) => dispatch(fetchUser(username))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);
